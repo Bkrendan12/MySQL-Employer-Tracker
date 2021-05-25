@@ -1,17 +1,17 @@
-DROP DATABASE IF EXISTS employeeTracker_Db;
+DROP DATABASE IF EXISTS employee_db;
 
-CREATE DATABASE employeeTracker_Db;
+CREATE DATABASE employee_db;
 
-USE employeeTracker_Db;
+USE employee_db;
 
-CREATE TABLE employee (
+CREATE TABLE employees (
     id INT PRIMARY KEY,
     first_name VARCHAR(30),
     last_name VARCHAR(30),
     role_id INT
 )
 
-CREATE TABLE role (
+CREATE TABLE roles (
   id INT PRIMARY KEY,
   title VARCHAR(30),
   salary DECIMAL(10,4),
@@ -19,14 +19,6 @@ CREATE TABLE role (
 );
 
 CREATE TABLE departments (
-  id INT NOT NULL,
+  id INT PRIMARY KEY,
   name VARCHAR(30),
-  PRIMARY KEY (id)
 );
-
-SELECT * FROM departments;
-SELECT * FROM role;
-SELECT * FROM employees;
-
-
-
