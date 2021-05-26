@@ -1,7 +1,5 @@
 const mysql = require("mysql");
 const inquirer = require("inquirer");
-const fs = require("fs");
-const path = require("path");
 const { promisify } = require("util");
 const consoleTable = require("console.table");
 
@@ -43,8 +41,8 @@ const employeeBuilderQuestions = [
   },
   {
     type: "list",
-    message: "what is the employee's role?",
-    name: "role",
+    message: "what is the employee's role_id?",
+    name: "role_id",
     choices: [],
   },
 ];
@@ -62,8 +60,8 @@ const roleBuilderQuestions = [
   },
   {
     type: "input",
-    message: "What is the department?",
-    name: "department",
+    message: "What is the department id?",
+    name: "departmentId",
   },
 ];
 
@@ -78,13 +76,13 @@ const departmentBuilderQuestions = [
 const updateEmployeeRoleQuestions = [
   {
     type: "list",
-    message: "what is the employee?",
+    message: "Who is the employee?",
     name: "employee",
     choices: [],
   },
   {
     type: "list",
-    message: "What is the role?",
+    message: "What is thier role?",
     name: "role",
     choices: [],
   },
@@ -93,7 +91,7 @@ const updateEmployeeRoleQuestions = [
 const updateEmployeeManagerQuestions = [
   {
     type: "list",
-    message: "what is the employee?",
+    message: "Who is the employee?",
     name: "employee",
     choices: [],
   },
@@ -126,7 +124,7 @@ async function run() {
     case "View all roles":
       await viewAllRoles();
       break;
-    case "add Employee":
+    case "Add employee":
       await addEmployee();
       break;
     case "add role":
@@ -143,51 +141,66 @@ async function run() {
 
 const query = promisify(connection.query.bind(connection));
 
+// View All Employees
+
 async function viewAllEmployees() {
   let res = await query("SELECT * FROM employees");
   console.log(consoleTable.getTable(res));
+  run();
 }
+
+// View All Departments
 
 async function viewAllDepartments() {
   let res = await query("SELECT * FROM departments");
   console.log(consoleTable.getTable(res));
 }
 
+// View All Roles
+
 async function viewAllRoles() {
   let res = await query("SELECT * FROM employees");
   console.log(consoleTable.getTable(res));
 }
 
+// Add Employee
+
 async function addEmployee() {
-  let { firstName, lastName, role } = await inquirer.prompt(
+  // let roles = await employee_db.viewAllRoles();
+  let { firstName, lastName, role_id } = await inquirer.prompt(
     employeeBuilderQuestions
   );
   let res = await query(
-    `INSERT INTO (first_name, last_name, role_id) VALUES (${firstName} ${lastName} ${role} )`
+    `INSERT INTO employees VALUES (${firstName}, ${lastName}, ${role_id})`
   );
-}
 
-async function addRole() {
-  let { title, salary, departmentId } = await inquirer.prompt(
-    roleBuilderQuestions
-  );
-  let res = await query(
-    `INSERT INTO (title, salary, department_id) VALUES (${title} ${salary} ${departmentId} )`
-  );
-}
-
-async function addDepartment() {
-  let { title } = await inquirer.prompt(departmentBuilderQuestions);
-  let res = await query(`INSERT INTO (title) VALUES (${title})`);
-}
-
-async function updateEmployeeRole() {
-  let { title, salary, departmentId } = await inquirer.prompt(
-    updateEmployeeRoleQuestions
-  );
-  let res = await query(
-    `INSERT INTO (title, salary, department_id) VALUES (${title} ${salary} ${departmentId})`
-  );
+  console.log(res);
 }
 
 run();
+
+// // Update Employee Role
+
+// async function updateEmployeeRole() {
+//   let { employee, role } = await inquirer.prompt(updateEmployeeRoleQuestions);
+//   sele
+//   let res = await query(
+//     `UPDATE roles SET employee = ${employee}, role = ${role} WHERE employee`)
+
+// Add Role
+
+// async function addRole() {
+//   let { title, salary, departmentId } = await inquirer.prompt(
+//     roleBuilderQuestions
+//   );
+//   let res = await query(
+//     `INSERT INTO (title, salary, department_id) VALUES (${title} ${salary} ${departmentId} )`
+//   );
+// }
+
+// // Add Department
+
+// async function addDepartment() {
+//   let { title } = await inquirer.prompt(departmentBuilderQuestions);
+//   let res = await query(`INSERT INTO (title) VALUES (${title})`);
+// }
