@@ -18,8 +18,8 @@ const actionQuestions = [
     name: "action",
     choices: [
       "View all employees",
-      "View all departments.",
-      "View all roles.",
+      "View all departments",
+      "View all roles",
       "Add employee",
       "Add role",
       "Add department",
@@ -43,7 +43,16 @@ const employeeBuilderQuestions = [
     type: "list",
     message: "what is the employee's role_id?",
     name: "role_id",
-    choices: [],
+    choices: async () => {
+      let res = await query(`SELECT * FROM roles`);
+      res = res.map((row) => {
+        return {
+          name: row.title,
+          value: row.id,
+        };
+      });
+      return res;
+    },
   },
 ];
 
@@ -59,9 +68,19 @@ const roleBuilderQuestions = [
     name: "salary",
   },
   {
-    type: "input",
+    type: "list",
     message: "What is the department id?",
     name: "departmentId",
+    choices: async () => {
+      let res = await query(`SELECT * FROM departments`);
+      res = res.map((row) => {
+        return {
+          name: row.department_name,
+          value: row.id,
+        };
+      });
+      return res;
+    },
   },
 ];
 
@@ -78,28 +97,32 @@ const updateEmployeeRoleQuestions = [
     type: "list",
     message: "Who is the employee?",
     name: "employee",
-    choices: [],
-  },
-  {
-    type: "list",
-    message: "What is thier role?",
-    name: "role",
-    choices: [],
-  },
-];
+    choices: async () => {
+      let res = await query(`SELECT * FROM employees`);
 
-const updateEmployeeManagerQuestions = [
-  {
-    type: "list",
-    message: "Who is the employee?",
-    name: "employee",
-    choices: [],
+      res = res.map((row) => {
+        return {
+          name: `${row.first_name} ${row.last_name}`,
+          value: row.id,
+        };
+      });
+      return res;
+    },
   },
   {
     type: "list",
     message: "What is the role?",
     name: "role",
-    choices: [],
+    choices: async () => {
+      let res = await query(`SELECT * FROM roles`);
+      res = res.map((row) => {
+        return {
+          name: row.title,
+          value: row.id,
+        };
+      });
+      return res;
+    },
   },
 ];
 
@@ -127,10 +150,10 @@ async function run() {
     case "Add employee":
       await addEmployee();
       break;
-    case "add role":
+    case "Add role":
       await addRole();
       break;
-    case "add department":
+    case "Add department":
       await addDepartment();
       break;
     case "Update employee role":
@@ -154,13 +177,15 @@ async function viewAllEmployees() {
 async function viewAllDepartments() {
   let res = await query("SELECT * FROM departments");
   console.log(consoleTable.getTable(res));
+  run();
 }
 
 // View All Roles
 
 async function viewAllRoles() {
-  let res = await query("SELECT * FROM employees");
+  let res = await query("SELECT * FROM roles");
   console.log(consoleTable.getTable(res));
+  run();
 }
 
 // Add Employee
@@ -171,36 +196,44 @@ async function addEmployee() {
     employeeBuilderQuestions
   );
   let res = await query(
-    `INSERT INTO employees VALUES (${firstName}, ${lastName}, ${role_id})`
+    `INSERT INTO employees (first_name, last_name, role_id) VALUES ('${firstName}', '${lastName}', ${role_id})`
   );
-
-  console.log(res);
+  viewAllEmployees();
 }
 
-run();
-
-// // Update Employee Role
-
-// async function updateEmployeeRole() {
-//   let { employee, role } = await inquirer.prompt(updateEmployeeRoleQuestions);
-//   sele
-//   let res = await query(
-//     `UPDATE roles SET employee = ${employee}, role = ${role} WHERE employee`)
+async function addDepartment() {
+  let { title } = await inquirer.prompt(departmentBuilderQuestions);
+  try {
+    let res = await query(
+      `INSERT INTO departments (department_name) VALUES ('${title}')`
+    );
+    viewAllDepartments();
+  } catch (err) {
+    console.error(err);
+  }
+}
 
 // Add Role
 
-// async function addRole() {
-//   let { title, salary, departmentId } = await inquirer.prompt(
-//     roleBuilderQuestions
-//   );
-//   let res = await query(
-//     `INSERT INTO (title, salary, department_id) VALUES (${title} ${salary} ${departmentId} )`
-//   );
-// }
+async function addRole() {
+  let { title, salary, departmentId } = await inquirer.prompt(
+    roleBuilderQuestions
+  );
+  let res = await query(
+    `INSERT INTO roles (title, salary, department_id) VALUES ('${title}', ${salary}, ${departmentId} )`
+  );
+  viewAllRoles();
+}
 
-// // Add Department
+// Update Employee Role
 
-// async function addDepartment() {
-//   let { title } = await inquirer.prompt(departmentBuilderQuestions);
-//   let res = await query(`INSERT INTO (title) VALUES (${title})`);
-// }
+async function updateEmployeeRole() {
+  let { employee, role } = await inquirer.prompt(updateEmployeeRoleQuestions);
+
+  let res = await query(
+    `UPDATE employees SET role_id = ${role} WHERE id = ${employee}`
+  );
+  viewAllEmployees();
+}
+
+run();
