@@ -41,7 +41,7 @@ const employeeBuilderQuestions = [
   },
   {
     type: "list",
-    message: "what is the employee's role_id?",
+    message: "What is the employee's role_id?",
     name: "role_id",
     choices: async () => {
       let res = await query(`SELECT * FROM roles`);
@@ -102,10 +102,11 @@ const updateEmployeeRoleQuestions = [
 
       res = res.map((row) => {
         return {
-          name: `${row.first_name} ${row.last_name}`,
+          name: `${row.first_name} ${row.last_name} ${row.role_id}`,
           value: row.id,
         };
       });
+      console.table(res);
       return res;
     },
   },
@@ -136,6 +137,7 @@ connection.connect(function (err) {
 async function run() {
   let { action } = await inquirer.prompt(actionQuestions);
   console.log(action);
+  console.log();
 
   switch (action) {
     case "View all employees":
@@ -157,7 +159,7 @@ async function run() {
       await addDepartment();
       break;
     case "Update employee role":
-      updateEmployeeRole();
+      await updateEmployeeRole();
       break;
   }
 }
@@ -167,8 +169,17 @@ const query = promisify(connection.query.bind(connection));
 // View All Employees
 
 async function viewAllEmployees() {
-  let res = await query("SELECT * FROM employees");
-  console.log(consoleTable.getTable(res));
+  let res = await query(
+    `SELECT
+      e.id AS ID,
+      e.first_name AS First,
+      e.last_name AS Last,
+      r.title AS Role
+     FROM employees e
+     LEFT JOIN roles r ON e.role_id = r.id
+     ORDER BY e.id`
+  );
+  console.table(res);
   run();
 }
 
@@ -183,7 +194,17 @@ async function viewAllDepartments() {
 // View All Roles
 
 async function viewAllRoles() {
-  let res = await query("SELECT * FROM roles");
+  let res = await query(`
+    SELECT
+    e.first_name,
+    e.last_name,
+    r.id AS ID,
+    r.title AS Role,
+    r.salary AS Salary,
+    r.department_id AS Department
+    FROM roles r
+    LEFT JOIN employees e ON e.role_id = r.id
+    `);
   console.log(consoleTable.getTable(res));
   run();
 }
@@ -191,14 +212,17 @@ async function viewAllRoles() {
 // Add Employee
 
 async function addEmployee() {
-  // let roles = await employee_db.viewAllRoles();
   let { firstName, lastName, role_id } = await inquirer.prompt(
     employeeBuilderQuestions
   );
-  let res = await query(
-    `INSERT INTO employees (first_name, last_name, role_id) VALUES ('${firstName}', '${lastName}', ${role_id})`
-  );
-  viewAllEmployees();
+  try {
+    let res = await query(
+      `INSERT INTO employees (first_name, last_name, role_id) VALUES ('${firstName}', '${lastName}', ${role_id})`
+    );
+    viewAllEmployees();
+  } catch (err) {
+    console.error(err);
+  }
 }
 
 async function addDepartment() {
@@ -219,21 +243,30 @@ async function addRole() {
   let { title, salary, departmentId } = await inquirer.prompt(
     roleBuilderQuestions
   );
-  let res = await query(
-    `INSERT INTO roles (title, salary, department_id) VALUES ('${title}', ${salary}, ${departmentId} )`
-  );
-  viewAllRoles();
+  try {
+    let res = await query(
+      `INSERT INTO roles (title, salary, department_id) VALUES ('${title}', ${salary}, ${departmentId} )`
+    );
+    viewAllRoles();
+  } catch (err) {
+    console.error(err);
+  }
 }
 
 // Update Employee Role
 
 async function updateEmployeeRole() {
   let { employee, role } = await inquirer.prompt(updateEmployeeRoleQuestions);
-
-  let res = await query(
-    `UPDATE employees SET role_id = ${role} WHERE id = ${employee}`
-  );
-  viewAllEmployees();
+  try {
+    let res = await query(
+      `UPDATE employees 
+       SET role_id = ${role} 
+       WHERE id = ${employee}`
+    );
+    viewAllEmployees();
+  } catch (err) {
+    console.error(err);
+  }
 }
 
 run();
