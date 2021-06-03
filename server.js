@@ -169,8 +169,9 @@ const query = promisify(connection.query.bind(connection));
 // View All Employees
 
 async function viewAllEmployees() {
-  let res = await query(
-    `SELECT
+  try {
+    let res = await query(
+      `SELECT
       e.id AS ID,
       e.first_name AS First,
       e.last_name AS Last,
@@ -178,34 +179,38 @@ async function viewAllEmployees() {
      FROM employees e
      LEFT JOIN roles r ON e.role_id = r.id
      ORDER BY e.id`
-  );
-  console.table(res);
+    );
+    console.table(res);
+  } catch (err) {
+    console.error(err);
+  }
   run();
 }
 
 // View All Departments
 
 async function viewAllDepartments() {
-  let res = await query("SELECT * FROM departments");
-  console.log(consoleTable.getTable(res));
+  try {
+    let res = await query("SELECT * FROM departments");
+    console.log(consoleTable.getTable(res));
+  } catch (err) {
+    console.error(err);
+  }
   run();
 }
 
 // View All Roles
 
 async function viewAllRoles() {
-  let res = await query(`
-    SELECT
-    e.first_name,
-    e.last_name,
-    r.id AS ID,
-    r.title AS Role,
-    r.salary AS Salary,
-    r.department_id AS Department
-    FROM roles r
-    LEFT JOIN employees e ON e.role_id = r.id
+  try {
+    let res = await query(`
+    SELECT * FROM roles 
+  
     `);
-  console.log(consoleTable.getTable(res));
+    console.log(consoleTable.getTable(res));
+  } catch (err) {
+    console.error(err);
+  }
   run();
 }
 
