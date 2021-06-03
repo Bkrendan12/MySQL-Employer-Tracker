@@ -16,7 +16,6 @@
 
 ## Screenshots from Application in Node.js
 
-```
 ![image](https://user-images.githubusercontent.com/59030105/120572085-69843380-c3e9-11eb-8e97-fc7fb4049e17.png)
 ![image](https://user-images.githubusercontent.com/59030105/120572151-786ae600-c3e9-11eb-9afe-51ede4a91fbd.png)
 ![image](https://user-images.githubusercontent.com/59030105/120572182-84ef3e80-c3e9-11eb-87bb-c11241bbacb4.png)
@@ -25,33 +24,33 @@
 ![image](https://user-images.githubusercontent.com/59030105/120572249-a0f2e000-c3e9-11eb-8d30-68722afbc7f6.png)
 ![image](https://user-images.githubusercontent.com/59030105/120572282-aea86580-c3e9-11eb-9807-973d5c720cc2.png)
 ![image](https://user-images.githubusercontent.com/59030105/120572296-b5cf7380-c3e9-11eb-816e-5b6f783ae4f8.png)
-```
 
 ## Tech Used
 
 ```
-* javascript
-* node.js
-* MySql/WorkBench
+Javascript
+Node.js
+MySql/WorkBench
 
 ```
 
 ## Motivation
 
 ```
-I wanted a clean and organized way of
-* Viewing my company's employees, Departments and Roles from the database
-* Adding new employees, departments and roles to the database
-* Updating the employee's role's in the database
+I wanted a clean and organized way of,
+
+   Viewing my company's employees, Departments and Roles from the database
+   Adding new employees, departments and roles to the database
+   Updating the employee's role's in the database
 ```
 
 ## Contact Information
 
 ```
-* Brendan Kurylo
-* 603-818-0578
-* bkrendan12@gmail.com
-* Rollinsford, NH
+ Brendan Kurylo
+ 603-818-0578
+ bkrendan12@gmail.com
+ Rollinsford, NH
 ```
 
 ## Credits include:
