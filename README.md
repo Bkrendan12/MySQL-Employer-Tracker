@@ -11,7 +11,6 @@ MySql Employee Tracker
 ## Link to Application Walkthrough Video
 
 - [Link-Application-video-walkthrough](https://www.youtube.com/watch?v=b10LJSIFHI0)
-- [Link-Application-video-walkthrough](https://youtu.be/b10LJSIFHI0)
 
 ## Screenshots from Application in Node.js
 
