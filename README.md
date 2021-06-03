@@ -6,7 +6,7 @@ MySql Employee Tracker
 
 ## Link to project repository
 
-[Link-to-Repository](https://github.com/Bkrendan12/MySQL-Employer-Tracker)
+- [Link-to-Repository](https://github.com/Bkrendan12/MySQL-Employer-Tracker)
 
 ## Link to Application Walkthrough Video
 
