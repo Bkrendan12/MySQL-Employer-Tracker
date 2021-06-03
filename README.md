@@ -2,17 +2,16 @@
 
 # Project Title
 
-## MySql Employee Tracker
+MySql Employee Tracker
 
 ## Link to project repository
 
 [Link-to-Repository](https://github.com/Bkrendan12/MySQL-Employer-Tracker)
-[Link-to-Repository](https://bkrendan12.github.io/MySQL-Employer-Tracker/)
 
 ## Link to Application Walkthrough Video
 
-[Link-Application-video-walkthrough](https://www.youtube.com/watch?v=b10LJSIFHI0)
-[Link-Application-video-walkthrough](https://youtu.be/b10LJSIFHI0)
+- [Link-Application-video-walkthrough](https://www.youtube.com/watch?v=b10LJSIFHI0)
+- [Link-Application-video-walkthrough](https://youtu.be/b10LJSIFHI0)
 
 ## Screenshots from Application in Node.js
 
@@ -56,6 +55,6 @@ I wanted a clean and organized way of,
 ## Credits include:
 
 ```
-   All work created by Brendan Kurylo.
+   All work created by Brendan Kurylo
    UNH Bootcamp © Brendan Kurylo
 ```
